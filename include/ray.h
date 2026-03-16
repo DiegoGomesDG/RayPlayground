@@ -6,18 +6,18 @@
 class ray {
 public:
     ray() {}
-    ray (const point3 &origin, const vec3 &direction) : origin(origin), direction(direction) {}
+    ray (const point3 &origin, const vec3 &direction) : orig(origin), dir(direction) {}
 
-    const point3 &origin() const { return this->origin; }
-    const vec3 &direction() const { return this->direction; }
+    const point3 &origin() const { return orig; }
+    const vec3 &direction() const { return dir; }
 
     point3 at(float t) const {
-        return origin + t * direction;
+        return orig + t * dir;
     }
 
 private:
-    point3 origin;
-    vec3 direction;
+    point3 orig;
+    vec3 dir;
 };
 
 #endif //RAYTRACING_RAY_H
