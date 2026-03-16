@@ -4,13 +4,13 @@
 class PPMImage {
 private:
     // TODO: Add 2D array to store the pixels
-    int imageWidth;
-    int imageHeight;
+    int image_width;
+    int image_height;
 public:
     PPMImage(int width, int height);
     ~PPMImage();
 
-    void setPixel(int x, int y);
+    void set_pixel(int x, int y);
     void save();
     void sample();
 };

@@ -1,33 +1,28 @@
 #include "PPMImage.h"
 
+#include "color.h"
+#include "vec3.h"
+
 #include <iostream>
 #include <ostream>
 
-PPMImage::PPMImage(int width, int height) : imageWidth(width), imageHeight(height) {}
+PPMImage::PPMImage(int width, int height) : image_width(width), image_height(height) {}
 
 PPMImage::~PPMImage() {}
 
-void PPMImage::setPixel(int x, int y) {
+void PPMImage::set_pixel(int x, int y) {
 }
 
 void PPMImage::save() {
 }
 
 void PPMImage::sample() {
-    std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
-
-    for (int j = 0; j < imageHeight; j++) {
-        std::clog << "\rScanlines Remaining: " << (imageHeight - j) << ' ' << std::flush;
-        for (int i = 0; i < imageWidth; i++) {
-            auto r = double(i) / (imageWidth - 1);
-            auto g = double(j) / (imageHeight - 1);
-            auto b = 0.0;
-
-            int ir = int(255.999 * r);
-            int ig = int(255.999 * g);
-            int ib = int(255.999 * b);
-
-            std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+    for (int j = 0; j < image_height; j++) {
+        std::clog << "\rScanlines Remaining: " << (image_height - j) << ' ' << std::flush;
+        for (int i = 0; i < image_width; i++) {
+            auto pixel_color = color(double(i)/(image_width - 1), double(j)/(image_height - 1), 0);
+            write_color(std::cout, pixel_color);
         }
     }
     std::clog << "\rDone.       \n";
