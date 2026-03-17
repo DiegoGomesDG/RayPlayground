@@ -6,10 +6,23 @@
 #include "ray.h"
 #include "vec3.h"
 
+bool hit_sphere(const point3 &center, double radius, const ray &ray) {
+    vec3 oc = center - ray.origin();
+    auto a = dot(ray.direction(), ray.direction());
+    auto b = -2.0f * dot(ray.direction(), oc);
+    auto c = dot(oc, oc) - radius * radius;
+
+    auto discr = b*b - 4 * a * c;
+    return discr >= 0;
+}
 
 color ray_color(const ray &r) {
     color white(1.0, 1.0, 1.0);
-    color blue(1.0, 0.0, 0.0);
+    color blue(0.5, 0.7, 1.0);
+    color red(1.0, 0.0, 0.0);
+
+    if (hit_sphere(point3(0, 0, -1), 0.5, r))
+        return red;
 
     vec3 unit_direction = unit_vector(r.direction());
     auto a = 0.5f * (unit_direction.y() + 1.0f);
@@ -53,5 +66,5 @@ int main(int argc, char *argv[]) {
             write_color(std::cout, pixel_color);
         }
     }
-    std::clog << "\rDone. \n";
+    std::clog << "\nDone. \n";
 }
