@@ -9,7 +9,7 @@ color ray_color(const ray &r, const hittable &world) {
     color blue(0.5f, 0.7f, 1.0f);
 
     hit_record rec;
-    if (world.hit(r, 0, infinity, rec)) {
+    if (world.hit(r, interval(0, infinity), rec)) {
         return 0.5 * (rec.normal + white);
     }
 
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     auto aspect_ratio = 16.0f / 9.0f;
     int image_width = 1000;
 
-    int image_height = int(image_width / aspect_ratio);
+    int image_height = static_cast<int>(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
 
     // World
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     // Camera
     float focal_length = 1.0f;
     float viewport_height = 2.0f;
-    float viewport_width = viewport_height * (double(image_width) / image_height);
+    float viewport_width = viewport_height * (static_cast<double>(image_width) / image_height);
     auto camera_center = point3(0, 0, 0);
 
     // Calculate vectors across horizontal and down the vertical viewport edges

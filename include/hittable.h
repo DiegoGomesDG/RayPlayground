@@ -18,8 +18,7 @@ struct hit_record {
 struct hittable {
     virtual ~hittable() = default;
     virtual bool hit(const ray &ray,
-                    float ray_tmin,
-                    float ray_tmax,
+                    interval ray_t,
                     hit_record &rec) const = 0;
 };
 
