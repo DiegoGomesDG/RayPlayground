@@ -8,16 +8,16 @@
 
 float hit_sphere(const point3 &center, float radius, const ray &ray) {
     vec3 oc = center - ray.origin();
-    auto a = dot(ray.direction(), ray.direction());
-    auto b = -2.0f * dot(ray.direction(), oc);
-    auto c = dot(oc, oc) - radius * radius;
+    auto a = ray.direction().length_squared();
+    auto h = dot(ray.direction(), oc);
+    auto c = oc.length_squared() - radius * radius;
 
-    auto discr = b*b - 4 * a * c;
+    auto discr = h * h - a * c;
 
     if (discr < 0) {
         return -1.0f;
     } else {
-        return (-b - std::sqrt(discr)) / (2.0f*a);
+        return (-h - std::sqrt(discr)) / a;
     }
 }
 
