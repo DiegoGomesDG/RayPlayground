@@ -1,6 +1,8 @@
 #ifndef RAYTRACING_CAMERA_H
 #define RAYTRACING_CAMERA_H
 
+#include <fstream>
+
 #include "hittable.h"
 #include "utils.h"
 

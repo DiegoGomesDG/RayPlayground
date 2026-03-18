@@ -1,9 +1,10 @@
 #include "Camera.h"
+#include "Image.h"
 
 void Camera::render(const hittable &world) {
     initialize();
+    Image image(image_width, image_height);
 
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
     for (int j = 0; j < image_height; j++) {
         std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
         for (int i = 0; i < image_width; i++) {
@@ -12,10 +13,13 @@ void Camera::render(const hittable &world) {
                 ray r = get_ray(i, j);
                 pixel_color += ray_color(r, max_depth, world);
             }
-            write_color(std::cout, pixel_samples_scale * pixel_color);
+            image.set_pixel(i, j, pixel_samples_scale * pixel_color);
         }
     }
-    std::clog << "\nDone.                               \n";
+    std::clog << "\nDone                    \n";
+
+    std::ofstream out("../image.ppm");
+    image.write_ppm(out);
 }
 
 void Camera::initialize() {
@@ -71,7 +75,7 @@ color Camera::ray_color(const ray &r, int depth, const hittable &world) const {
     const color blue(0.5f, 0.7f, 1.0f);
 
     hit_record rec;
-    if (world.hit(r, interval(0, infinity), rec)) {
+    if (world.hit(r, interval(0.001, infinity), rec)) {
         vec3 direction = random_on_hemisphere(rec.normal);
         return 0.5f * ray_color(ray(rec.p, direction), depth - 1, world);
     }
