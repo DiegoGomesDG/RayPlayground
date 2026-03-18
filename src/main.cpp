@@ -4,7 +4,11 @@
 #include "hittable_list.h"
 #include "Sphere.h"
 
+#include <chrono>
+#include <iostream>
+
 int main(int argc, char *argv[]) {
+    auto start = std::chrono::high_resolution_clock::now();
 
     hittable_list world;
 
@@ -14,12 +18,17 @@ int main(int argc, char *argv[]) {
     Camera cam;
 
     cam.aspect_ratio        = 16.0f / 9.0f;
-    cam.image_width         = 1000;
+    cam.image_width         = 600;
     cam.samples_per_pixel   = 100;
     cam.max_depth           = 50;
 
-
     cam.render(world);
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    /* Compute duration in seconds */
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Total Render Time: " << elapsed.count() << " seconds\n";
 
     return 0;
 }
