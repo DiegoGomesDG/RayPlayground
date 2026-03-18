@@ -1,14 +1,15 @@
 #ifndef RAYTRACING_INTERVAL_H
 #define RAYTRACING_INTERVAL_H
+
 #include "utils.h"
 
 struct interval {
 public:
     float min, max;
     interval() : min(+infinity), max(-infinity) {}
-    interval(const float min, const float max) : min(min), max(max) {}
+    interval(const real min, const real max) : min(min), max(max) {}
 
-    double size() const {
+    real size() const {
         return max - min;
     }
 
@@ -20,7 +21,7 @@ public:
         return min < x && x < max;
     }
 
-    float clamp(const float x) const {
+    real clamp(const float x) const {
         if (x < min) return min;
         if (x > max) return max;
         return x;

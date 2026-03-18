@@ -4,10 +4,10 @@
 #include "utils.h"
 
 struct hit_record {
-    point3 p;
-    vec3 normal;
-    float t;
-    bool front_face;
+    point3  p;
+    vec3    normal;
+    real    t;
+    bool    front_face;
 
     void set_face_normal(const ray &ray, const vec3 &outward_normal) {
         front_face = dot(ray.direction(), outward_normal) < 0;
@@ -16,10 +16,10 @@ struct hit_record {
 };
 
 struct hittable {
-    virtual ~hittable() = default;
-    virtual bool hit(const ray &ray,
-                    interval ray_t,
-                    hit_record &rec) const = 0;
+    virtual         ~hittable() = default;
+    virtual bool    hit(const ray   &ray,
+                        interval    ray_t,
+                        hit_record  &rec) const = 0;
 };
 
 #endif //RAYTRACING_HITTABLE_H

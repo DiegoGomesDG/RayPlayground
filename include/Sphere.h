@@ -9,8 +9,8 @@ public:
     bool hit(const ray &ray, interval ray_t, hit_record &rec) const override;
 
 private:
-    point3 center;
-    float radius;
+    point3  center;
+    float   radius;
 };
 
 #endif //RAYTRACING_SPHERE_H
