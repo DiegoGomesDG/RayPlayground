@@ -11,6 +11,7 @@ public:
 private:
     point3  center;
     float   radius;
+    shared_ptr<material> mat;
 };
 
 #endif //RAYTRACING_SPHERE_H

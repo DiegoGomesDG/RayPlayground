@@ -3,11 +3,14 @@
 
 #include "utils.h"
 
+class material;
+
 struct hit_record {
     point3  p;
     vec3    normal;
     real    t;
     bool    front_face;
+    shared_ptr<material> mat;
 
     void set_face_normal(const ray &ray, const vec3 &outward_normal) {
         front_face = dot(ray.direction(), outward_normal) < 0;

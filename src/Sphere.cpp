@@ -3,6 +3,7 @@
 Sphere::Sphere(const point3 &center, float radius) {
     this->center = center;
     this->radius = std::fmax(0, radius);
+    // TODO: Init material pointer 'mat'
 }
 
 bool Sphere::hit(const ray &ray, interval ray_t, hit_record &rec) const {
@@ -31,6 +32,7 @@ bool Sphere::hit(const ray &ray, interval ray_t, hit_record &rec) const {
     rec.p               = ray.at(rec.t);
     vec3 outward_normal = (rec.p - center) / radius;
     rec.set_face_normal(ray, outward_normal);
+    rec.mat             = mat;
 
     return true;
 
