@@ -69,7 +69,7 @@ public:
         bool cannot_refract = ri * sin_theta > 1.0;
         vec3 direction;
 
-        if (cannot_refract)
+        if (cannot_refract || reflectance(cos_theta, ri) > random_real())
             direction = reflect(unit_direction, rec.normal);
         else
             direction = refract(unit_direction, rec.normal, ri);
@@ -83,5 +83,11 @@ public:
 
 private:
     real refraction_index;
+
+    static real reflectance(real cosine, real refraction_index) {
+        auto r0 = (1 - refraction_index) / (1 + refraction_index);
+        r0 = r0 * r0;
+        return r0 + (1 - r0) * std::pow(1 - cosine, 5);
+    }
 };
 #endif //RAYTRACING_MATERIAL_H
