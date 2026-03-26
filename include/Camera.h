@@ -13,6 +13,8 @@ public:
     int     samples_per_pixel   = 100;
     int     max_depth           = 10;
 
+    real    vfov                = 90.0;
+
     void    render(const hittable &world);
 
 private:

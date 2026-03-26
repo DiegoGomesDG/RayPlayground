@@ -27,21 +27,23 @@ void Camera::initialize() {
     image_height            = static_cast<int>(image_width / aspect_ratio);
     image_height            = (image_height < 1) ? 1 : image_height;
 
-    pixel_samples_scale     = 1.0f / samples_per_pixel;
+    pixel_samples_scale     = 1.0 / samples_per_pixel;
 
     center                  = point3(0, 0, 0);
 
-    float focal_length      = 1.0f;
-    float viewport_height   = 2.0f;
-    float viewport_width    = viewport_height * (static_cast<double>(image_width) / image_height);
+    real    focal_length      = 1.0;
+    auto    theta             = degrees_to_radians(vfov);
+    auto    h                 = std::tan(theta / 2.0);
+    real    viewport_height   = 2.0 * h * focal_length;
+    real    viewport_width    = viewport_height * (static_cast<double>(image_width) / image_height);
 
     // Calculate vectors across horizontal and down the vertical viewport edges
-    auto viewport_u         = vec3(viewport_width, 0, 0);
-    auto viewport_v         = vec3(0, -viewport_height, 0);
+    auto    viewport_u         = vec3(viewport_width, 0, 0);
+    auto    viewport_v         = vec3(0, -viewport_height, 0);
 
     // Calculate the horizontal and vertical delta vectors from pixel to pixel
-    pixel_delta_u           = viewport_u / image_width;
-    pixel_delta_v           = viewport_v / image_height;
+    pixel_delta_u   = viewport_u / image_width;
+    pixel_delta_v   = viewport_v / image_height;
 
     // Calculate location of the upper left pixel (0, 0)
     auto viewport_upper_left = center - vec3(0, 0, focal_length) - viewport_u/2 - viewport_v/2;
