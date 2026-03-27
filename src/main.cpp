@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
     auto material_left = make_shared<dielectric>(1.50);
     auto material_bubble = make_shared<dielectric>(1.00 / 1.50);
-    auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2), 0.0);
+    auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2), 1.0);
 
     world.add(make_shared<Sphere>(point3( 0.0, -100.5, -1.0), 100.0, material_ground));
     world.add(make_shared<Sphere>(point3( 0.0, 0.0, -1.2), 0.5, material_center));
@@ -29,9 +29,14 @@ int main(int argc, char *argv[]) {
     Camera cam;
 
     cam.aspect_ratio        = 16.0f / 9.0f;
-    cam.image_width         = 1280;
+    cam.image_width         = 1080;
     cam.samples_per_pixel   = 100;
     cam.max_depth           = 50;
+
+    cam.vfov        = 90;
+    cam.lookfrom    = point3(-2,2,1);
+    cam.lookat      = point3(0,0,-1);
+    cam.vup         = vec3(0,1,0);
 
     cam.render(world);
 

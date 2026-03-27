@@ -105,6 +105,14 @@ inline vec3 unit_vector(const vec3 &v) {
     return v / v.length();
 }
 
+inline vec3 random_in_unit_sphere() {
+    while (true) {
+        auto p = vec3(random_real(-1, 1), random_real(-1, 1), 0);
+        if (p.length_squared() < 1) // accept if radius is less than 1
+            return p;
+    }
+}
+
 inline vec3 random_unit_vector() {
     while (true) {
         auto p = vec3::random(-1.0f, 1.0f);

@@ -8,22 +8,31 @@
 
 class Camera {
 public:
-    real    aspect_ratio        = 1.0;
-    int     image_width         = 600;
-    int     samples_per_pixel   = 100;
-    int     max_depth           = 10;
+    real    aspect_ratio        = 1.0;      // Ratio of image width over height
+    int     image_width         = 600;      // Rendered image width in pixel count
+    int     samples_per_pixel   = 100;      // Count of random samples for each pixel
+    int     max_depth           = 10;       // Maximum number of ray bounces into scene
 
-    real    vfov                = 90.0;
+    real    vfov        = 90.0;             // Vertical view angle (FoV)
+    point3  lookfrom    = point3(0, 0, 0);  // Point camera is looking from
+    point3  lookat      = point3(0, 0, -1); // Point camera is looking at
+    vec3    vup         = vec3(0, 1, 0);    // Camera-relative "up" direction
+
+    real    defocus_angle   = 0;
+    real    focus_dist      = 10;
 
     void    render(const hittable &world);
 
 private:
-    int     image_height;
-    real    pixel_samples_scale;
-    point3  center;
-    point3  pixel00_loc;
-    vec3    pixel_delta_u;
-    vec3    pixel_delta_v;
+    int     image_height;                   // Rendered image height
+    real    pixel_samples_scale;            // Color scale factor for a sum of pixel samples
+    point3  center;                         // Camera center
+    point3  pixel00_loc;                    // Location of pixel 0, 0
+    vec3    pixel_delta_u;                  // Offset to pixel to the right
+    vec3    pixel_delta_v;                  // Offset to pixel below
+    vec3    u, v, w;                        // Camera frame basis vectors
+    vec3    defocus_disk_u;
+    vec3    defocus_disk_v;
 
     void    initialize();
     ray     get_ray(const int i, const int j) const;
