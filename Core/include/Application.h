@@ -1,0 +1,9 @@
+#ifndef RAYTRACING_APPLICATION_H
+#define RAYTRACING_APPLICATION_H
+
+
+class Application {
+};
+
+
+#endif //RAYTRACING_APPLICATION_H
