@@ -11,6 +11,15 @@ target_include_directories(RayTracing
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+# Link GLFW and ImGui
+target_link_libraries(imgui
+        PUBLIC
+        glfw
+        glad
+)
+
 target_link_libraries(RayTracing
-        PUBLIC Core
+        PRIVATE
+            Core
+            imgui
 )
