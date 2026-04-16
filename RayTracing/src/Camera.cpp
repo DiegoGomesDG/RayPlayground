@@ -6,8 +6,11 @@ void Camera::render(const hittable &world) {
     initialize();
     Image image(image_width, image_height);
 
+    auto start = std::chrono::steady_clock::now();
+    double smoothed_avg = 0.0;
+
     for (int j = 0; j < image_height; j++) {
-        std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
+        print_progress(j, image_height, start, smoothed_avg);
         for (int i = 0; i < image_width; i++) {
             color pixel_color(0, 0, 0);
             for (int sample = 0; sample < samples_per_pixel; sample++) {
@@ -17,10 +20,54 @@ void Camera::render(const hittable &world) {
             image.set_pixel(i, j, pixel_samples_scale * pixel_color);
         }
     }
-    std::clog << "\nDone                    \n";
 
     std::ofstream out("../image.ppm");
     image.write_ppm(out);
+}
+
+void Camera::print_progress(int current_line,
+                            int total_lines,
+                            const std::chrono::steady_clock::time_point& start,
+                            double &smoothed_avg) {
+    const int bar_width = 30;
+
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed = now - start;
+
+    if (current_line == 0) return;
+
+    int remaining_lines = total_lines - current_line;
+    double progress = (double)current_line / total_lines;
+
+    double avg_time =
+        std::chrono::duration<double>(elapsed).count() / current_line;
+
+    // smoothing
+    if (smoothed_avg == 0.0)
+        smoothed_avg = avg_time;
+    else
+        smoothed_avg = 0.9 * smoothed_avg + 0.1 * avg_time;
+
+    double eta_seconds = smoothed_avg * remaining_lines;
+
+    int total_sec = static_cast<int>(eta_seconds);
+    int minutes = total_sec / 60;
+    int seconds = total_sec % 60;
+
+    int pos = bar_width * progress;
+
+    std::clog << "\r[";
+    for (int i = 0; i < bar_width; i++) {
+        if (i < pos) std::clog << "█";
+        else std::clog << "-";
+    }
+
+    std::clog << "] "
+              << int(progress * 100.0) << "% "
+              << "| ETA: "
+              << minutes << " min "
+              << seconds << " sec   "
+              << std::flush;
 }
 
 void Camera::initialize() {

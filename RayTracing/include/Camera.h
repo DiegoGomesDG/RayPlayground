@@ -22,6 +22,10 @@ public:
     real    focus_dist      = 10;
 
     void    render(const hittable &world);
+    void    print_progress(int current_line,
+                            int total_lines,
+                            const std::chrono::steady_clock::time_point& start,
+                            double &smoothed_avg);
 
 private:
     int     image_height;                   // Rendered image height
