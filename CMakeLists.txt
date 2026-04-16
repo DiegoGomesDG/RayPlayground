@@ -1,10 +1,20 @@
-cmake_minimum_required(VERSION 4.1)
-project(RayTracing)
+cmake_minimum_required(VERSION 3.20)
+project(RayTracingProject)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Add subprojects to the build.
-# Each subdirectory contains its own CMakeLists.txt and defines targets
-# that become part of this overall project.
-add_subdirectory(RayTracing)
+# Third-party libraries
+# GLFW
+add_subdirectory(thirdparty/glfw)
+
+# GLAD
+add_library(glad STATIC
+        thirdparty/glad/src/glad.c
+)
+target_include_directories(glad PUBLIC
+        thirdparty/glad/include
+)
+
+# Modules
 add_subdirectory(Core)
+add_subdirectory(RayTracing)
