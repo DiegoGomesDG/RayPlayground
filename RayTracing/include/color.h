@@ -4,6 +4,8 @@
 #include "vec3.h"
 #include "interval.h"
 
+#include <glm/glm.hpp>
+
 using color = vec3;
 
 inline real linear_to_gamma(double linear_component) {
@@ -30,6 +32,36 @@ inline void write_color(std::ostream &out, const color &pixel_color) {
     int bbyte = static_cast<int>(256 * intensity.clamp(b));
 
     out << rbyte << ' ' << gbyte << ' ' << bbyte << std::endl;
+}
+
+inline glm::u8vec3 to_rgb8(const color& pixel_color)
+{
+    auto r = linear_to_gamma(pixel_color.x());
+    auto g = linear_to_gamma(pixel_color.y());
+    auto b = linear_to_gamma(pixel_color.z());
+
+    static const interval intensity(0.000, 0.999);
+
+    uint8_t rbyte = static_cast<uint8_t>(256 * intensity.clamp(r));
+    uint8_t gbyte = static_cast<uint8_t>(256 * intensity.clamp(g));
+    uint8_t bbyte = static_cast<uint8_t>(256 * intensity.clamp(b));
+
+    return { rbyte, gbyte, bbyte };
+}
+
+inline uint32_t to_rgba(const color& pixel_color)
+{
+    auto r = linear_to_gamma(pixel_color.x());
+    auto g = linear_to_gamma(pixel_color.y());
+    auto b = linear_to_gamma(pixel_color.z());
+
+    static const interval intensity(0.000, 0.999);
+
+    uint8_t rbyte = static_cast<uint8_t>(256 * intensity.clamp(r));
+    uint8_t gbyte = static_cast<uint8_t>(256 * intensity.clamp(g));
+    uint8_t bbyte = static_cast<uint8_t>(256 * intensity.clamp(b));
+
+    return (0xFF << 24) | (bbyte << 16) | (gbyte << 8) | rbyte;
 }
 
 #endif //RAYTRACING_COLOR_H

@@ -25,6 +25,35 @@ void Camera::render(const hittable &world) {
     image.write_ppm(out);
 }
 
+void Camera::render_to_buffer(const hittable &world, std::vector<uint32_t> &framebuffer) {
+    framebuffer.resize(image_width * image_height);
+
+    auto start = std::chrono::steady_clock::now();
+    double smoothed_avg = 0.0;
+
+    for (int j = 0; j < image_height; j++)
+    {
+        print_progress(j, image_height, start, smoothed_avg);
+
+        for (int i = 0; i < image_width; i++)
+        {
+            color pixel_color(0, 0, 0);
+
+            for (int sample = 0; sample < samples_per_pixel; sample++)
+            {
+                ray r = get_ray(i, j);
+                pixel_color += ray_color(r, max_depth, world);
+            }
+
+            pixel_color *= pixel_samples_scale;
+
+            // Write directly into GPU-ready format
+            framebuffer[j * image_width + i] = to_rgba(pixel_color);
+        }
+    }
+}
+
+
 void Camera::print_progress(int current_line,
                             int total_lines,
                             const std::chrono::steady_clock::time_point& start,

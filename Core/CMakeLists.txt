@@ -18,4 +18,5 @@ target_link_libraries(Core
         glfw
         glad
         glm
+        imgui
 )

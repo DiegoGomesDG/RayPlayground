@@ -24,6 +24,8 @@ namespace Core {
         Application(const ApplicationSpecification& spec = ApplicationSpecification());
         ~Application();
 
+        void init_imgui();
+
         void run();
         void stop();
 

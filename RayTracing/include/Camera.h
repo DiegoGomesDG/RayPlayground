@@ -10,6 +10,7 @@ class Camera {
 public:
     real    aspect_ratio        = 1.0;      // Ratio of image width over height
     int     image_width         = 600;      // Rendered image width in pixel count
+    int     image_height;                   // Rendered image height
     int     samples_per_pixel   = 100;      // Count of random samples for each pixel
     int     max_depth           = 10;       // Maximum number of ray bounces into scene
 
@@ -22,13 +23,19 @@ public:
     real    focus_dist      = 10;
 
     void    render(const hittable &world);
-    void    print_progress(int current_line,
-                            int total_lines,
-                            const std::chrono::steady_clock::time_point& start,
-                            double &smoothed_avg);
+    void    print_progress(
+        int     current_line,
+        int     total_lines,
+        const   std::chrono::steady_clock::time_point& start,
+        double  &smoothed_avg
+    );
+
+    void    render_to_buffer(
+        const hittable& world,
+        std::vector<uint32_t>& framebuffer
+    );
 
 private:
-    int     image_height;                   // Rendered image height
     real    pixel_samples_scale;            // Color scale factor for a sum of pixel samples
     point3  center;                         // Camera center
     point3  pixel00_loc;                    // Location of pixel 0, 0

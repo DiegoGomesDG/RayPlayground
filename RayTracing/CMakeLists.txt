@@ -12,5 +12,6 @@ target_include_directories(RayTracing
 )
 
 target_link_libraries(RayTracing
-        PRIVATE Core imgui
+        PRIVATE
+        Core
 )

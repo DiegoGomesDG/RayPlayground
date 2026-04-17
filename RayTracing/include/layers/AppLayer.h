@@ -7,30 +7,30 @@
 
 #include <glm/glm.hpp>
 
+#include "Camera.h"
+#include "hittable_list.h"
+#include "glad/glad.h"
+
 class AppLayer : public Core::Layer{
 public:
     AppLayer();
-    virtual ~AppLayer() override;
+    virtual ~AppLayer() override = default;
 
     void on_event(Core::Event &event) override;
-
     void on_update(float timestamp) override;
     void on_render() override;
 
 private:
-    bool on_mouse_button_pressed(Core::MouseButtonPressedEvent &event);
-    bool on_mouse_moved(Core::MouseMovedEvent &event);
-    bool on_key_pressed(Core::KeyPressedEvent &event);
+    void init_scene();
 
 private:
-    uint32_t m_shader           = 0;
-    uint32_t m_vertex_array     = 0;
-    uint32_t m_vertex_buffer    = 0;
+    hittable_list m_world;
+    Camera m_camera;
 
-    float m_time = 0.0f;
+    std::vector<uint32_t> m_framebuffer;
 
-    glm::vec2 m_pouse_position { 0.0f };
-
+    GLuint m_texture = 0;
+    bool m_rendered = false;
 };
 
 #endif //RAYTRACINGPROJECT_APPLAYER_H

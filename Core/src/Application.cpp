@@ -2,6 +2,11 @@
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glad/glad.h>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include <cassert>
 #include <iostream>
@@ -21,7 +26,11 @@ namespace Core {
         s_application = this;
 
         glfwSetErrorCallback(GLFW_error_callback);
-        glfwInit();
+
+        if (!glfwInit()) {
+            std::cerr << "Failed to initialize" << std::endl;
+            return;
+        }
 
         if (m_spec.settings.title.empty()) {
             m_spec.settings.title = m_spec.name;
@@ -52,21 +61,39 @@ namespace Core {
                 stop();
                 break;
             }
-        }
 
-        float current_time = get_time();
-        float timestep = glm::clamp(current_time - last_time, 0.001f, 0.1f);
-        last_time = current_time;
+            float current_time = get_time();
+            float timestep = glm::clamp(current_time - last_time, 0.001f, 0.1f);
+            last_time = current_time;
 
-        // Main layer update
-        for (const std::unique_ptr<Layer>& layer : m_layer_stack) {
-            layer->on_update(timestep);
-        }
+            // Main layer update
+            for (const std::unique_ptr<Layer>& layer : m_layer_stack) {
+                layer->on_update(timestep);
+            }
 
-        for (const std::unique_ptr<Layer>& layer : m_layer_stack) {
-            layer->on_render();
+            glViewport(
+                0,
+                0,
+                m_window->framebuffer_size().x,
+                m_window->framebuffer_size().y
+            );
+
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            for (const std::unique_ptr<Layer>& layer : m_layer_stack) {
+                layer->on_render();
+            }
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            m_window->update();
         }
-        m_window->update();
     }
 
     void Application::stop() {
