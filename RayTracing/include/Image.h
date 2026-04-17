@@ -7,7 +7,7 @@ public:
     int width, height;
     std::vector<color> pixels;
 
-    Image(int w, int h) : width(w), height(h), pixels(w * h) {}
+    Image(int width, int height) : width(width), height(height), pixels(width * height) {}
 
     void set_pixel(int x, int y, const color &c) {
         pixels[y * width + x] = c;

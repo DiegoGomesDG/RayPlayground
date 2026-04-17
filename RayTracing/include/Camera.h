@@ -8,8 +8,8 @@
 
 class Camera {
 public:
-    real    aspect_ratio        = 1.0;      // Ratio of image width over height
-    int     image_width         = 600;      // Rendered image width in pixel count
+    real    aspect_ratio;                   // Ratio of image width over height
+    int     image_width;                    // Rendered image width in pixel count
     int     image_height;                   // Rendered image height
     int     samples_per_pixel   = 100;      // Count of random samples for each pixel
     int     max_depth           = 10;       // Maximum number of ray bounces into scene
@@ -21,6 +21,8 @@ public:
 
     real    defocus_angle   = 0;
     real    focus_dist      = 10;
+
+    void set_resolution(const int width, const int height);
 
     void    render(const hittable &world);
     void    print_progress(

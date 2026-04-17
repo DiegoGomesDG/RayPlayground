@@ -2,6 +2,12 @@
 #include "Image.h"
 #include "material.h"
 
+void Camera::set_resolution(const int width, const int height) {
+    image_width = width;
+    image_height = std::max(1, height);
+    aspect_ratio = static_cast<double>(width) / static_cast<double>(height);
+}
+
 void Camera::render(const hittable &world) {
     initialize();
     Image image(image_width, image_height);
@@ -26,21 +32,19 @@ void Camera::render(const hittable &world) {
 }
 
 void Camera::render_to_buffer(const hittable &world, std::vector<uint32_t> &framebuffer) {
+    initialize();
     framebuffer.resize(image_width * image_height);
 
     auto start = std::chrono::steady_clock::now();
     double smoothed_avg = 0.0;
 
-    for (int j = 0; j < image_height; j++)
-    {
+    for (int j = 0; j < image_height; j++) {
         print_progress(j, image_height, start, smoothed_avg);
 
-        for (int i = 0; i < image_width; i++)
-        {
+        for (int i = 0; i < image_width; i++) {
             color pixel_color(0, 0, 0);
 
-            for (int sample = 0; sample < samples_per_pixel; sample++)
-            {
+            for (int sample = 0; sample < samples_per_pixel; sample++) {
                 ray r = get_ray(i, j);
                 pixel_color += ray_color(r, max_depth, world);
             }
@@ -48,7 +52,8 @@ void Camera::render_to_buffer(const hittable &world, std::vector<uint32_t> &fram
             pixel_color *= pixel_samples_scale;
 
             // Write directly into GPU-ready format
-            framebuffer[j * image_width + i] = to_rgba(pixel_color);
+            int flipped_j = image_height - 1 - j;
+            framebuffer[flipped_j * image_width + i] = to_rgba(pixel_color);
         }
     }
 }
@@ -100,8 +105,8 @@ void Camera::print_progress(int current_line,
 }
 
 void Camera::initialize() {
-    image_height            = static_cast<int>(image_width / aspect_ratio);
-    image_height            = (image_height < 1) ? 1 : image_height;
+    // image_height            = static_cast<int>(image_width / aspect_ratio);
+    // image_height            = (image_height < 1) ? 1 : image_height;
 
     pixel_samples_scale     = 1.0 / samples_per_pixel;
 

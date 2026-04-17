@@ -61,7 +61,7 @@ inline uint32_t to_rgba(const color& pixel_color)
     uint8_t gbyte = static_cast<uint8_t>(256 * intensity.clamp(g));
     uint8_t bbyte = static_cast<uint8_t>(256 * intensity.clamp(b));
 
-    return (0xFF << 24) | (bbyte << 16) | (gbyte << 8) | rbyte;
+    return (rbyte) | (gbyte << 8) | (bbyte << 16) | (0xFF << 24);
 }
 
 #endif //RAYTRACING_COLOR_H

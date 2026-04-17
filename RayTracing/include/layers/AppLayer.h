@@ -4,12 +4,11 @@
 #include "Layer.h"
 #include "InputEvents.h"
 #include "WindowEvents.h"
-
-#include <glm/glm.hpp>
+#include "GLImage.h"
 
 #include "Camera.h"
 #include "hittable_list.h"
-#include "glad/glad.h"
+
 
 class AppLayer : public Core::Layer{
 public:
@@ -22,14 +21,16 @@ public:
 
 private:
     void init_scene();
+    void init_texture(int width, int height);
+    void upload_texture();
 
 private:
     hittable_list m_world;
     Camera m_camera;
 
+    std::shared_ptr<Core::GLImage> m_image;
     std::vector<uint32_t> m_framebuffer;
 
-    GLuint m_texture = 0;
     bool m_rendered = false;
 };
 

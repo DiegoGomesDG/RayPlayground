@@ -21,19 +21,23 @@ add_subdirectory(thirdparty/glm)
 # ImGui (submodule)
 add_library(imgui STATIC)
 
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui)
 target_sources(imgui PRIVATE
-        thirdparty/imgui/imgui.cpp
-        thirdparty/imgui/imgui_draw.cpp
-        thirdparty/imgui/imgui_tables.cpp
-        thirdparty/imgui/imgui_widgets.cpp
+        ${IMGUI_DIR}/imgui.cpp
+        ${IMGUI_DIR}/imgui_demo.cpp
+        ${IMGUI_DIR}/imgui_draw.cpp
+        ${IMGUI_DIR}/imgui_tables.cpp
+        ${IMGUI_DIR}/imgui_widgets.cpp
+        ${IMGUI_DIR}/imgui_tables.cpp
+        ${IMGUI_DIR}/imgui_widgets.cpp
 
-        thirdparty/imgui/backends/imgui_impl_glfw.cpp
-        thirdparty/imgui/backends/imgui_impl_opengl3.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 target_include_directories(imgui PUBLIC
-        thirdparty/imgui
-        thirdparty/imgui/backends
+        ${IMGUI_DIR}
+        ${IMGUI_DIR}/backends
 )
 
 # Link GLFW and ImGui

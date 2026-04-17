@@ -17,16 +17,78 @@ void AppLayer::on_update(float timestamp) {
     // Layer::on_update(timestamp);
 }
 
-void AppLayer::on_render() {
+void AppLayer::on_render()
+{
+    ImGuiViewport* vp = ImGui::GetMainViewport();
 
-    // Render ImGui
-    ImGui::Begin("Ray Tracer");
+    ImGui::SetNextWindowPos(vp->Pos);
+    ImGui::SetNextWindowSize(vp->Size);
 
-    ImGui::Text("Ray Tracer");
+    ImGuiWindowFlags flags =
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_NoNavFocus;
+
+    ImGui::Begin("Root", nullptr, flags);
+
+    // --- layout sizes ---
+    float sidebarWidth = 320.0f;
+    ImVec2 avail = ImGui::GetContentRegionAvail();
+
+    // Left: Viewport
+    ImVec2 size;
+    ImGui::BeginChild("Viewport", ImVec2(avail.x - sidebarWidth, avail.y), true);
+    size = ImGui::GetContentRegionAvail();
+
+    if (m_image) {
+        ImGui::Image(
+            m_image->get_imgui_texture_id(),
+            size,
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+        );
+    } else {
+        ImGui::Text("No image rendered");
+    }
+    ImGui::EndChild();
+
+    ImGui::SameLine();
+
+    // Settings
+    ImGui::BeginChild("Settings", ImVec2(sidebarWidth, avail.y), true);
+
+    ImGui::Text("Camera Settings");
+
+    ImGui::SliderInt("Samples", &m_camera.samples_per_pixel, 1, 500);
+    ImGui::SliderInt("Max Depth", &m_camera.max_depth, 1, 50);
+
+    if (ImGui::Button("Render")) {
+        int width  = (int)size.x;
+        int height = (int)size.y;
+
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+
+        m_camera.set_resolution(width, height);
+
+        m_camera.render_to_buffer(m_world, m_framebuffer);
+
+        if (!m_image) {
+            m_image = std::make_shared<Core::GLImage>(width, height);
+        } else if (m_image->get_width() != width || m_image->get_height() != height) {
+            m_image->resize(width, height);
+        }
+
+        m_image->set_data(m_framebuffer.data());
+    }
+
+    ImGui::EndChild();
 
     ImGui::End();
-
-
 }
 
 void AppLayer::init_scene() {
@@ -69,8 +131,6 @@ void AppLayer::init_scene() {
 
     m_camera = Camera();
 
-    m_camera.aspect_ratio        = 16.0 / 9.0;
-    m_camera.image_width         = 1280;
     m_camera.samples_per_pixel   = 10;
     m_camera.max_depth           = 5;
 

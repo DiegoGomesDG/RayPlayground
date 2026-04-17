@@ -5,6 +5,8 @@
 #include "Window.h"
 #include "Event.h"
 
+#include <GLFW/glfw3.h>
+
 #include <string>
 #include <memory>
 #include <vector>
