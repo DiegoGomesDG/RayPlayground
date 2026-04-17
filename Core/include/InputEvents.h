@@ -44,6 +44,14 @@ namespace Core {
         double m_mouseY;
     };
 
+    class MouseButtonEvent : public Event {
+    public:
+        inline int get_mouse_button() const { return m_button; }
+    protected:
+        MouseButtonEvent(int button) : m_button(button) {}
+        int m_button;
+    };
+
     class MouseButtonPressedEvent : public MouseButtonEvent {
     public:
         MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}

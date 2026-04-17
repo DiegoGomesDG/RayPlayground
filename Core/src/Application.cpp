@@ -30,6 +30,9 @@ namespace Core {
         m_spec.settings.event_callback = [this](Event& event) {
             raise_event(event);
         };
+
+        m_window = std::make_shared<Window>(m_spec.settings);
+        m_window->create();
     }
 
     Application::~Application() {
@@ -63,7 +66,7 @@ namespace Core {
         for (const std::unique_ptr<Layer>& layer : m_layer_stack) {
             layer->on_render();
         }
-
+        m_window->update();
     }
 
     void Application::stop() {

@@ -13,10 +13,10 @@ namespace Core {
 
     struct WindowSettings {
         std::string title;
-        uint32_t    width       = 1280;
-        uint32_t    height      = 720;
-        bool        isResizable = true;
-        bool        VSync       = true;
+        uint32_t    width           = 1280;
+        uint32_t    height          = 720;
+        bool        is_resizable    = true;
+        bool        VSync           = true;
 
         using EventCallbackFunction = std::function<void(Event&)>;
         EventCallbackFunction event_callback;

@@ -25,6 +25,10 @@ namespace Core {
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         #endif
 
+        if (!m_settings.is_resizable) {
+            glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+        }
+
         m_handle = glfwCreateWindow(
             m_settings.width,
             m_settings.height,
@@ -76,6 +80,6 @@ namespace Core {
     }
 
     bool Window::should_close() {
-        return glfwWindowShouldClose(m_handle);
+        return glfwWindowShouldClose(m_handle) != 0;
     }
 }

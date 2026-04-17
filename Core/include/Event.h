@@ -9,7 +9,7 @@ namespace Core {
         None = 0,
         WindowClose, WindowResize,
         KeyPressed, KeyReleased,
-        MouseButtonPressed, MouseButtonReleased, MoveMoved, MouseScrolled
+        MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
     };
 
     #define EVENT_CLASS_TYPE(type) static EventType get_static_type() { return EventType::type; }\
