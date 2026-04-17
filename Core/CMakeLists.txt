@@ -17,4 +17,5 @@ target_link_libraries(Core
         PUBLIC
         glfw
         glad
+        glm
 )

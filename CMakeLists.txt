@@ -15,6 +15,9 @@ target_include_directories(glad PUBLIC
         thirdparty/glad/include
 )
 
+# GLM
+add_subdirectory(thirdparty/glm)
+
 # ImGui (submodule)
 add_library(imgui STATIC)
 
