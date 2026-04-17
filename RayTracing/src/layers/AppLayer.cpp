@@ -42,7 +42,6 @@ void AppLayer::on_render() {
 
     ImGui::Begin("Root", nullptr, flags);
 
-    // --- layout sizes ---
     float sidebarWidth = 320.0f;
     ImVec2 avail = ImGui::GetContentRegionAvail();
 
@@ -81,6 +80,11 @@ void AppLayer::on_render() {
     // Settings
     ImGui::BeginChild("Settings", ImVec2(sidebarWidth, avail.y), true);
 
+    float button_area_height = 80.0f;
+
+    // Top: Settings
+    ImGui::BeginChild("SettingsArea", ImVec2(0, avail.y - button_area_height), true);
+
     if (ImGui::CollapsingHeader("Render##render_header")) {
         ImGui::SliderInt("Samples", &m_camera.samples_per_pixel, 1, 500);
         ImGui::SliderInt("Max Depth", &m_camera.max_depth, 1, 100);
@@ -103,18 +107,22 @@ void AppLayer::on_render() {
             m_camera.vfov = static_cast<real>(vfov);
         }
     }
+    ImGui::EndChild();
 
-     if (ImGui::Button("Render##render_button")) {
+    ImGui::Spacing();
+
+    ImGui::BeginChild("RenderArea", ImVec2(0, 0), true);
+    float button_width = ImGui::GetContentRegionAvail().x;
+
+     if (ImGui::Button("Render##render_button", ImVec2(button_width, 40))) {
         int width  = (int)size.x;
         int height = (int)size.y;
 
-        if (width <= 0 || height <= 0) {
-            return;
+        if (width > 0 || height > 0) {
+            start_render(width, height);
         }
-
-        start_render(width, height);
-
     }
+    ImGui::EndChild();
 
     ImGui::EndChild();
 
