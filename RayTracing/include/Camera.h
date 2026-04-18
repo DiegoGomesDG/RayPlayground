@@ -38,6 +38,8 @@ public:
         std::atomic<bool>& cancel_flag
     );
 
+    void set_progress_callback(std::function<void(float)> cb) { progress_callback = cb; }
+
 private:
     real    pixel_samples_scale;            // Color scale factor for a sum of pixel samples
     point3  center;                         // Camera center
@@ -47,6 +49,8 @@ private:
     vec3    u, v, w;                        // Camera frame basis vectors
     vec3    defocus_disk_u;
     vec3    defocus_disk_v;
+
+    std::function<void(float)> progress_callback;
 
     void    initialize();
     ray     get_ray(const int i, const int j) const;

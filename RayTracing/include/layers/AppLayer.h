@@ -37,6 +37,10 @@ private:
     std::atomic<bool>   m_cancel_rendering  = false;
 
     std::mutex          m_framebuffer_mutex;
+
+    std::atomic<float>  m_render_progress = 0.0f;
+    std::atomic<int>    m_render_eta_sec = 0;
+    std::chrono::steady_clock::time_point m_render_start;
 };
 
 #endif //RAYTRACINGPROJECT_APPLAYER_H

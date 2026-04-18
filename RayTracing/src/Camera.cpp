@@ -39,7 +39,10 @@ void Camera::render_to_buffer(const hittable &world, std::vector<uint32_t> &fram
     double smoothed_avg = 0.0;
 
     for (int j = 0; j < image_height; j++) {
-        print_progress(j, image_height, start, smoothed_avg);
+        float progress = (float)j / (float)image_height;
+        if (progress_callback) {
+            progress_callback(progress);
+        }
 
         if (cancel_flag) return;
         for (int i = 0; i < image_width; i++) {

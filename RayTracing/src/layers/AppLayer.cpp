@@ -80,7 +80,7 @@ void AppLayer::on_render() {
     // Settings
     ImGui::BeginChild("Settings", ImVec2(sidebarWidth, avail.y), true);
 
-    float button_area_height = 80.0f;
+    float button_area_height = 130.0f;
 
     // Top: Settings
     ImGui::BeginChild("SettingsArea", ImVec2(0, avail.y - button_area_height), true);
@@ -91,30 +91,32 @@ void AppLayer::on_render() {
     }
 
     if (ImGui::CollapsingHeader("Camera")) {
-        ImGui::Text("Transform");
 
         ImGui::DragFloat3("Look From", &m_camera.lookfrom.e[0], 1.00f);
         ImGui::DragFloat3("Look At", &m_camera.lookfrom.e[1], 1.00f);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::Text("Lens");
 
         auto vfov = static_cast<float>(m_camera.vfov);
         if (ImGui::SliderFloat("Vertical FOV", &vfov, 1.0f, 179.0f, "%.1f")) {
             m_camera.vfov = static_cast<real>(vfov);
         }
+
+        ImGui::SliderFloat("Focal Distance", &m_camera.focus_dist, 1.00f, 200.0f, "%.1f");
     }
     ImGui::EndChild();
 
     ImGui::Spacing();
 
+    float progress = m_render_progress.load();
+
+    float eta = 0.0f;
+    if (progress > 0.001f) {
+        auto now = std::chrono::steady_clock::now();
+        float elapsed = std::chrono::duration<float>(now - m_render_start).count();
+        eta = elapsed * (1.0f - progress) / progress;
+    }
     ImGui::BeginChild("RenderArea", ImVec2(0, 0), true);
     float button_width = ImGui::GetContentRegionAvail().x;
-
-     if (ImGui::Button("Render##render_button", ImVec2(button_width, 40))) {
+    if (ImGui::Button("Render##render_button", ImVec2(button_width, 40))) {
         int width  = (int)size.x;
         int height = (int)size.y;
 
@@ -122,11 +124,25 @@ void AppLayer::on_render() {
             start_render(width, height);
         }
     }
-    ImGui::EndChild();
+
+
+    ImGui::Spacing();
+    ImGui::ProgressBar(m_render_progress.load(), ImVec2(-1, 0));
+
+    ImGui::Spacing();
+    if (eta > 0.1f) {
+        ImGui::Text("ETA: %.1f s", eta);
+    } else if (eta < 0.1f && !m_framebuffer.empty()) {
+        ImGui::Text("Completed");
+    } else {
+        ImGui::Text("Render not started");
+    }
 
     ImGui::EndChild();
 
-    ImGui::ShowDemoWindow();
+    ImGui::EndChild();
+
+    // ImGui::ShowDemoWindow();
     ImGui::End();
 }
 
@@ -144,7 +160,13 @@ void AppLayer::start_render(int width, int height) {
         std::vector<uint32_t> local_buffer;
 
         m_camera.set_resolution(width, height);
+        m_camera.set_progress_callback([this](float p) {m_render_progress = p; });
+
+        m_render_start = std::chrono::steady_clock::now();
+        m_render_progress = 0.0f;
+
         m_camera.render_to_buffer(m_world, local_buffer, m_cancel_rendering);
+
 
         if (!m_cancel_rendering) {
             std::lock_guard<std::mutex> lock(m_framebuffer_mutex);
