@@ -3,18 +3,18 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/DiegoGomesDG/RayTracing">
+  <a href="https://github.com/DiegoGomesDG/RayPlayground">
     <img src="assets/icon_ray_tracing.png" alt="Logo" width="250px" height="250px">
   </a>
 
-<h3 align="center">Ray Tracing</h3>
+<h3 align="center">Ray Playground</h3>
 
   <p align="center">
     An interactive software raytracer written in C++, with a graphical user interface made using ImGUI & OpenGL.
     <br />
-    <a href="https://github.com/DiegoGomesDG/RayTracing/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/DiegoGomesDG/RayPlayground/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/DiegoGomesDG/RayTracing/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/DiegoGomesDG/RayPlayground/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -72,12 +72,12 @@ In addition, this project is designed as a modular and extensible application, a
 
 > Note: This project is currently developed for macOS, using OpenGL 3.3 for better compatibility (as newer OpenGL versions are deprecated on macOS).
 
-### ⚙️ Installation (using vcpkg + CMake)
+### ⚙️ Installation (CMake)
 
 1. Clone the repository (with submodules)
    ```sh
-   git clone --recurse-submodules https://github.com/DiegoGomesDG/RayTracing
-   cd RayTracing
+   git clone --recurse-submodules https://github.com/DiegoGomesDG/RayPlayground
+   cd RayPlayground
    ```
 2. Create and enter the build directory
    ```bash
